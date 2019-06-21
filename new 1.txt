@@ -1,5 +1,9 @@
 SIMPLE WEB API .NET IN VISUAL STUDIO
-STRUCTURE:
+Requirements/Implementaion: Visual Studio 2017 and MSSQL Server 2008 R2
+    NOTE:   CommonApplicationFramework can be downloaded from the same repository.  
+    		In Packages > CAF 1.0.0.1 > CommonApplicationFramework.dll 
+
+STRUCTURE(PROJECT):
 	-testDiscountProject2(main project)
 	    References-CommonApplicationFramework
 				  -testDiscountProject2.Business
@@ -325,7 +329,7 @@ namespace testDiscountProject2
   <connectionStrings>
     <add name="NorthwindDbConnection" providerName="System.Data.SqlClient"
 
-         connectionString="Data Source=DESKTOP-H8LBM5I;initial catalog=testDB; User Id=sa; password=admin_123"/>
+         connectionString="Data Source=DESKTOP-H8LBM5I;initial catalog=testDB; User Id=sa; password=***_***"/>
   </connectionStrings>
   <appSettings>
     <add key="webpages:Version" value="3.0.0.0"/>
