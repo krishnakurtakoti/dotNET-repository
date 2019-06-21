@@ -1,8 +1,10 @@
 # dotNET-repository
 Krishna's DotNet Collection
-SIMPLE WEB API .NET IN VISUAL STUDIO
-Requirements/Implementaion: Visual Studio 2017 and MSSQL Server 2008 R2
-    NOTE:   CommonApplicationFramework can be downloaded from the same repository.It shoul be added to the references.  
+
+			SIMPLE WEB API .NET IN VISUAL STUDIO
+
+	Requirements/Implementaion: Visual Studio 2017 and MSSQL Server 2008 R2
+ NOTE:   CommonApplicationFramework can be downloaded from the same repository.It shoul be added to the references.  
     		In 
 		
 		Packages > CAF 1.0.0.1 > CommonApplicationFramework.dll 
@@ -82,6 +84,7 @@ STEPS:
 
 2.No Params
 3.In Headers,
+			
 			URL             			 http://localhost:62161/
 			Content-Type				 application/json
 			
