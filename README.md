@@ -74,15 +74,12 @@ STEPS:
          connectionString="Data Source=DESKTOP-H8LBM5I;initial catalog=testDB; User Id=sa; password=***_***"/>
   	</connectionStrings>
   10.Save all and check for no errors.
-  11.Open postman and
-  
-  	and write the GET request:
-			
-		GET method
+  11.Open postman and write the GET request:GET method
 
 		http://localhost:62161/api/Discounts/GetDiscountList
 
 2.No Params
+
 3.In Headers,
 			
 			URL             			 http://localhost:62161/
@@ -117,8 +114,11 @@ STEPS:
 *>>>> BreakPoint
 
 Hit F10 to go to next step.	
-When it reaches List<Discount> discountList = _IDiscountBusiness.GetList(); ,hit F11.	
+When it reaches 
+		
+		List<Discount> discountList = _IDiscountBusiness.GetList(); ,hit F11.	
 Hit F11 to go into the method.
+
 You will go to DiscountBusiness.cs
  
  	public List<Discount> GetList()
