@@ -3,7 +3,9 @@ Krishna's DotNet Collection
 SIMPLE WEB API .NET IN VISUAL STUDIO
 Requirements/Implementaion: Visual Studio 2017 and MSSQL Server 2008 R2
     NOTE:   CommonApplicationFramework can be downloaded from the same repository.It shoul be added to the references.  
-    		In Packages > CAF 1.0.0.1 > CommonApplicationFramework.dll 
+    		In 
+		
+		Packages > CAF 1.0.0.1 > CommonApplicationFramework.dll 
 
 
 STEPS:
@@ -78,16 +80,16 @@ STEPS:
 
 		http://localhost:62161/api/Discounts/GetDiscountList
 
-		2.No Params
-		3.In Headers,
+2.No Params
+3.In Headers,
 			URL             			 http://localhost:62161/
 			Content-Type				 application/json
 			
-		4.Click Send.
+4.Click Send.
 ********************************************************************************************************************
 				WORKFLOW:
 				
-				1.Apply breakpoint in DiscountController at:
+1.Apply breakpoint in DiscountController at:
 				
 
 			 [HttpGet,ActionName("GetDiscountList")]
@@ -111,10 +113,10 @@ STEPS:
 		
 *>>>> BreakPoint
 
-	Hit F10 to go to next step.	
-	When it reaches List<Discount> discountList = _IDiscountBusiness.GetList(); ,hit F11.	
-	Hit F11 to go into the method.
-	You will go to DiscountBusiness.cs
+Hit F10 to go to next step.	
+When it reaches List<Discount> discountList = _IDiscountBusiness.GetList(); ,hit F11.	
+Hit F11 to go into the method.
+You will go to DiscountBusiness.cs
  
  	public List<Discount> GetList()
         {
