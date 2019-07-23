@@ -46,17 +46,238 @@ STEPS:
 4.In  testDiscountProject2.Business,make 2 new folders 
 			
 			Business and IBusiness.
-			Add DiscountBusiness(class) and IDiscountBusiness(interface).          
+			Add DiscountBusiness(class) and IDiscountBusiness(interface).
+			
+			
+			****************************************************************************************
+			DiscountBusiness.cs
+			
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
+			using System.Web;
+			using testDiscountProject2.Business.IBusiness;
+			using testDiscountProject2.Models;
+			using testDiscountProject2.Repositori.IRepository;
+			using testDiscountProject2.Repositori.Repository;
+
+			namespace testDiscountProject2.Business.Business
+			{
+			    public class DiscountBusiness : IDiscountBusiness
+			    {
+				private readonly IDiscountRepository _IRepository;
+				public DiscountBusiness()
+				{
+				    _IRepository = new DiscountRepository();
+				}
+
+				public List<Discount> GetList()
+				{
+				    return _IRepository.GetListInRepository();
+				  // throw new NotImplementedException();
+				}
+			    }
+			}
+			
+			
+			
+			***********************************************************************************
+			IDiscountBusiness.cs
+
+
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
+			using System.Text;
+			using System.Threading.Tasks;
+			using testDiscountProject2.Models;
+
+			namespace testDiscountProject2.Business.IBusiness
+			{
+			    public interface IDiscountBusiness
+			    {
+				List<Discount> GetList();
+			    }
+			}
+			
+			
 5.In  testDiscountProject2.Repositori,make 2 new folders 
 
 			Repository and IRepository.
 			Add DiscountRepository(class) and IDiscountRepository(interface).
+			
+			*********************************************************************************************
+			DiscountRepository.cs
+			
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
+			using System.Web;
+			using testDiscountProject2.Models;
+			using testDiscountProject2.Repositori.IRepository;
+			using CommonApplicationFramework.DataHandling;
+			using System.Configuration;
+			using System.Data;
+			using System.Data.SqlClient;
+			namespace testDiscountProject2.Repositori.Repository
+			{
+			    public class DiscountRepository : IDiscountRepository
+			    {
+				private DBManager dbManager;
+				public string ConnectionString { get; set; }
+				public List<Discount> GetListInRepository()
+				{
+				    Discount discountDetail = new Discount();
+				    List<Discount> discountList = new List<Discount>();
+
+				    try
+				    {
+					/* using (dbManager = new DBManager())
+					{
+					    return discountList;
+					}
+
+					 */
+
+					ConnectionString = ConfigurationManager.ConnectionStrings["NorthwindDbConnection"].ConnectionString;
+					SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+					sqlConnection.Open();
+					 SqlCommand sqlCommand1 = new SqlCommand("SELECT ID, Name, IsActive, IsDeleted "
+							    + " FROM dbo.Discount",sqlConnection);
+
+					SqlDataReader dr = sqlCommand1.ExecuteReader();
+					{
+					   while (dr.Read())
+					    {
+						discountDetail = new Discount();
+						discountDetail.ID = ConvertData.ToString(dr["ID"]);
+						discountDetail.Name = Convert.ToString(dr["Name"]);
+						discountDetail.IsActive = Convert.ToInt32(dr["IsActive"]);
+						discountDetail.IsDeleted = Convert.ToInt32(dr["IsDeleted"]);
+						discountList.Add(discountDetail);
+					    }
+
+					    sqlConnection.Close();
+					    //return discountList;
+					}
+
+				       // sqlConnection.Close();
+						   return discountList;
+				    }
+				    catch(Exception)
+				    {
+					throw new NotImplementedException();
+				    }
+				}
+			    }
+			}
+			
+			
+			*********************************************************************************************		
+			IDiscountRepository.cs
+			
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
+			using System.Text;
+			using System.Threading.Tasks;
+			using testDiscountProject2.Models;
+
+			namespace testDiscountProject2.Repositori.IRepository
+			{
+			    public interface IDiscountRepository
+			    {
+				List<Discount> GetListInRepository();
+			    }
+			}
+
+
+
+			
+			
 6.In  testDiscountProject2.Models,
 
 			add Discount.cs as class.
+			
+			***********************************************************************************
+			Discount.cs
+		
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
+			using System.Web;
+
+			namespace testDiscountProject2.Models
+			{
+			    public class Discount
+			    {
+				public string ID { get; set; }
+				public string Name { get; set; }
+				public int IsActive { get; set; }
+				public int IsDeleted { get; set; }
+			    }
+			}
+			
 7.In  testDiscountProject2,
 			
 			add new controller named DiscountController.cs
+			
+			
+					******************************************************************************************************	
+			DiscountController.cs
+			
+		
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
+			using System.Net;
+			using System.Net.Http;
+			using System.Web.Http;
+			using testDiscountProject2.Business.Business;
+			using testDiscountProject2.Business.IBusiness;
+			using testDiscountProject2.Models;
+
+			namespace testDiscountProject2.Controllers
+			{
+			    public class DiscountsController : ApiController
+			    {
+				private readonly IDiscountBusiness _IDiscountBusiness;
+
+
+				public DiscountsController()
+				{
+				    _IDiscountBusiness = new DiscountBusiness();
+				}
+
+			     /*   public DiscountsController(IDiscountBusiness iDiscountBusiness)
+				{
+				    _IDiscountBusiness = iDiscountBusiness;
+				}
+			     */
+
+
+				[HttpGet,ActionName("GetDiscountList")]
+				public IHttpActionResult Get()
+				{
+				    try
+				    {
+					List<Discount> discountList = _IDiscountBusiness.GetList();
+					if(discountList != null && discountList.Count > 0)
+					{
+					    return Content(HttpStatusCode.OK, discountList);
+					}
+					return Content(HttpStatusCode.NotFound, "NOT FOUND");
+				    }
+				    catch(Exception ex)
+				    {
+					throw new NotImplementedException();
+				    }
+				}
+
+			    }
+			}
+
+
 8.In  WebApiConfig.cs in the   testDiscountProject2(main project),add the following:
 
 	config.Routes.MapHttpRoute(
@@ -64,6 +285,46 @@ STEPS:
              routeTemplate: "api/{controller}/{action}/{code}/{id}",
              defaults: new { id = RouteParameter.Optional, code = RouteParameter.Optional }
             );
+	    
+Full File
+			WebApiConfig.cs
+
+			using System;
+			using System.Collections.Generic;
+			using System.Linq;
+			using System.Web.Http;
+
+			namespace testDiscountProject2
+			{
+			    public static class WebApiConfig
+			    {
+				public static void Register(HttpConfiguration config)
+				{
+				    // Web API configuration and services
+
+				    // Web API routes
+				    config.MapHttpAttributeRoutes();
+
+				    config.Routes.MapHttpRoute(
+				     name: "DefaultApi2",
+				     routeTemplate: "api/{controller}/{action}/{code}/{id}",
+				     defaults: new { id = RouteParameter.Optional, code = RouteParameter.Optional }
+				    );
+
+
+
+				    config.Routes.MapHttpRoute(
+					name: "DefaultApi",
+					routeTemplate: "api/{controller}/{id}",
+					defaults: new { id = RouteParameter.Optional }
+				    );
+				}
+			    }
+			}
+	    
+	    
+	    
+	    
  9.In Web.config, add at the top of the file with your 
  
  	MS SQLServer Name,Database Name,Login Id and password.:
@@ -73,6 +334,9 @@ STEPS:
 
          connectionString="Data Source=DESKTOP-H8LBM5I;initial catalog=testDB; User Id=sa; password=***_***"/>
   	</connectionStrings>
+	
+	
+	
   10.Save all and check for no errors.
   11.Open postman and write the GET request:GET method
 
